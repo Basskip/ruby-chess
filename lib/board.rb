@@ -6,6 +6,10 @@ class ChessBoard
         @board = Array.new(8*8)
     end
 
+    def place_piece(piece, pos)
+        @board[self.class.xy_to_flat(pos[0],pos[1])] = piece
+    end
+
     def is_empty?
         @board.empty?
     end
@@ -47,5 +51,22 @@ class ChessBoard
         return false if pos[0] > WIDTH - 1 || pos[0] < 0
         return false if pos[1] > HEIGHT - 1 || pos[1] < 0
         true
+    end
+
+    def printable_board
+        result = ""
+        (HEIGHT - 1).downto(0) do |y|
+            row = ""
+            WIDTH.times do |x|
+                if pos_piece([x,y])
+                    row << pos_piece([x,y]).symbol
+                else
+                    row << " "
+                end
+            end
+            row << "\n"
+            result << row
+        end
+        result
     end
 end

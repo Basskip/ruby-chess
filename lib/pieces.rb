@@ -1,16 +1,17 @@
 class Piece
-    attr_reader :color
+    attr_reader :color, :symbol
     attr_accessor :moved
-    def initialize(color)
+    def initialize(color, symbol)
         @color = color
         @moved = false
+        @symbol = symbol
     end
 end
 
 class DirectionalPiece < Piece
     DIRECTIONS = []
-    def initialize(color)
-        super(color)
+    def initialize(color, symbol)
+        super(color, symbol)
     end
 
     def destinations(board, pos)
@@ -39,34 +40,34 @@ end
 
 class Bishop < DirectionalPiece
     DIRECTIONS = [[1,1],[1,-1],[-1,-1],[-1, 1]]
-    def initialize(color)
-        super(color)
+    def initialize(color, symbol)
+        super(color, symbol)
     end
 end
 
 class Rook < DirectionalPiece
     DIRECTIONS = [[0,1],[0,-1],[1,0],[-1, 0]]
-    def initialize(color)
-        super(color)
+    def initialize(color, symbol)
+        super(color, symbol)
     end
 end
 
 class Queen < DirectionalPiece
     DIRECTIONS = [[0,1],[0,-1],[1,0],[-1, 0],[1,1],[1,-1],[-1,-1],[-1, 1]]
-    def initialize(color)
-        super(color)
+    def initialize(color, symbol)
+        super(color, symbol)
     end
 end
 
 class Knight < Piece
-    NORMAL_MOVES = [[1,2],[2,1],[2,-1],[1,-2],[-1,-2],[-2,-1],[-2,1],[-1,2]]
-    def initialize(color)
-        super(color)
+    @normal_moves = [[1,2],[2,1],[2,-1],[1,-2],[-1,-2],[-2,-1],[-2,1],[-1,2]]
+    def initialize(color, symbol)
+        super(color, symbol)
     end
 
     def destinations(board, pos)
         moves = []
-        NORMAL_MOVES.each do |move|
+        @normal_moves.each do |move|
             target = [pos[0] + move[0], pos[1] + move[1]]
             if board.on_board?(target)
                 if board.pos_free?(target)
@@ -84,35 +85,35 @@ class Knight < Piece
 end
 
 class Pawn < Piece
-    def initialize(color)
-        super(color)
+    def initialize(color, symbol)
+        super(color, symbol)
         if color == :white
-            NORMAL_MOVES = [[0,1]]
-            CAPTURING_MOVES = [[-1,1],[1,1]]
-            STARTING_MOVES = [[0,2]]
+            @normal_moves = [[0,1]]
+            @capturing_moves = [[-1,1],[1,1]]
+            @starting_moves = [[0,2]]
         elsif color == :black
-            NORMAL_MOVES = [[0,-1]]
-            CAPTURING_MOVES = [[-1,-1],[1,-1]]
-            STARTING_MOVES = [[0,-2]]
+            @normal_moves = [[0,-1]]
+            @capturing_moves = [[-1,-1],[1,-1]]
+            @starting_moves = [[0,-2]]
         end
     end
 
     def destinations(board, pos)
         moves = []
-        NORMAL_MOVES.each do |move|
+        @normal_moves.each do |move|
             target = [pos[0] + move[0], pos[1] + move[1]]
             if board.on_board?(target) && board.pos_free?(target)
                 moves << move
             end
         end
-        CAPTURING_MOVES.each do |move|
+        @capturing_moves.each do |move|
             target = [pos[0] + move[0], pos[1] + move[1]]
             if board.on_board?(target) && board.pos_piece.color != self.color
                 moves << move
             end
         end
         if !@moved
-            STARTING_MOVES.each do |move|
+            @starting_moves.each do |move|
                 target = [pos[0] + move[0], pos[1] + move[1]]
                 #This will work for now
                 en_route = [pos[0], pos[1] + move[1]/2]
@@ -125,15 +126,15 @@ class Pawn < Piece
 end
 
 class King < Piece
-    NORMAL_MOVES = [[0,1],[0,-1],[1,0],[-1, 0]]
+    @normal_moves = [[0,1],[0,-1],[1,0],[-1, 0]]
     CASTLING_MOVES = [[-2,0],[2,0]]
-    def initialize(color)
-        super(color)
+    def initialize(color, symbol)
+        super(color, symbol)
     end
 
     def destinations(board, pos)
         moves = []
-        NORMAL_MOVES.each do |move|
+        @normal_moves.each do |move|
             target = [pos[0] + move[0], pos[1] + move[1]]
             if board.on_board?(target)
                 if board.pos_free?(target)

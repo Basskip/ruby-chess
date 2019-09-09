@@ -29,6 +29,63 @@ class ChessBoard
     def xy_piece(x,y)
         @board[self.class.xy_to_flat(x,y)]
     end
+
+    def index(piece)
+        @board.index(piece)
+    end
+
+    def checkmate?(color)
+        @board.each do |piece|
+            if piece && piece.class == King && piece.color == color
+                index = @board.index(piece)
+                pos = [index % HEIGHT, index / HEIGHT]
+                return pos_checked?(pos, color) && piece.destinations(self, pos) == []
+            end
+        end
+        false
+    end
+
+    def check?(color)
+        @board.each do |piece|
+            if piece && piece.class == King && piece.color == color
+                index = @board.index(piece)
+                pos = [index % HEIGHT, index / HEIGHT]
+                return pos_checked?(pos, color)
+            end
+        end
+        false
+    end
+
+    def game_over?
+        return checkmate?(:white) || checkmate?(:black)
+    end
+
+    def each
+        @board.each do |pos|
+            yield(pos)
+        end
+    end
+
+    def pos_checked?(pos, side)
+        WIDTH.times do |x|
+            HEIGHT.times do |y|
+                piece = self.pos_piece([x,y])
+                if piece && piece.color != side
+                    return true if piece.capture_spaces(self,[x,y]).include?(pos)
+                end
+            end
+        end
+        false
+    end
+
+    def clear_passants
+        @board.each do |piece|
+            if piece.class == Pawn
+                piece.passant_capturable= false
+                piece.passant_pos= nil
+            end
+        end
+    end
     
     def self.xy_to_flat(x,y)
         y*8 + x

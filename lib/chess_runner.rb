@@ -1,16 +1,13 @@
 require_relative 'board.rb'
 require_relative 'pieces.rb'
+require_relative 'saving.rb'
+
 
 class ChessRunner
+    include Saving
     attr_accessor :board
     def initialize
-        @board = ChessBoard.new
-        @activeplayer = :white
-        @inactiveplayer = :black
-        place_others(:white, 0)
-        place_pawns(:white, 1)
-        place_pawns(:black, 6)
-        place_others(:black, 7)
+        self.setup_game
     end
 
     def place_pawns(color, row)
@@ -46,10 +43,61 @@ class ChessRunner
         end
     end
 
+    def setup_game
+        @board = ChessBoard.new
+        @activeplayer = :white
+        @inactiveplayer = :black
+        place_others(:white, 0)
+        place_pawns(:white, 1)
+        place_pawns(:black, 6)
+        place_others(:black, 7)
+    end
+
+    def start
+        puts "Welcome to chess, select an option to start:"
+        puts "1 - Start a new game"
+        puts "2 - Load a game from file"
+        puts "3 - Quit"
+        selection = get_selection
+        if selection == "1"
+            play
+        elsif selection == "2"
+            show_saves
+            load_from_file(select_save)
+            play
+        elsif selection == "3"
+            exit
+        end
+    end
+
+    def get_selection
+        print "Your selection: "
+        input = ""
+
+        loop do
+            input = gets.chomp
+            if input.match?(/[1-3]/)
+                break
+            else 
+                print "Invalid selection try again:"
+            end
+        end
+        input
+    end
+
     def play
         until @board.game_over?(@activeplayer)
             draw_board
             move = get_move(@activeplayer)
+            until move != "save"
+                if move == "save"
+                    save(self.get_filename)
+                end
+                move = get_move(@activeplayer)
+            end
+            if move == "exit"
+                break
+            end
             @board.execute_move(move)
             promo = promotable_pawn
             if promo
@@ -64,6 +112,8 @@ class ChessRunner
             end
             self.swap_activeplayer
         end
+        self.setup_game
+        self.start
     end
 
     def promotable_pawn
@@ -115,9 +165,26 @@ class ChessRunner
                 if piece && piece.letter == letter && piece.color == player && piece.destinations_without_check(@board, start).include?(dest)
                     return [start,dest]
                 end
+            elsif move == "save" || move == "exit"
+                return move
             end
             puts "Invalid move, please try again:"
             move = gets.chomp
         end
+    end
+
+    def to_yaml
+        YAML.dump ({
+            :board => @board,
+            :activeplayer => @activeplayer,
+            :inactiveplayer => @inactiveplayer
+        })
+    end
+
+    def load_from_yaml(string)
+        data = YAML.load(string)
+        @board = data[:board]
+        @activeplayer = data[:activeplayer]
+        @inactiveplayer = data[:inactiveplayer]
     end
 end

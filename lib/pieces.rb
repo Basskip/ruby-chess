@@ -13,6 +13,8 @@ class Piece
         remove_checking_dests(pos, dests, board)
     end
 
+    private
+
     def remove_checking_dests(pos, dests, board)
         dests.select do |dest|
             !board.next_board([pos,dest]).check?(@color)

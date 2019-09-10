@@ -159,7 +159,7 @@ class ChessBoard
     def printable_board
         result = ""
         (HEIGHT - 1).downto(0) do |y|
-            row = ""
+            row = "#{y+1}"
             WIDTH.times do |x|
                 if pos_piece([x,y])
                     row << pos_piece([x,y]).symbol
@@ -170,6 +170,7 @@ class ChessBoard
             row << "\n"
             result << row
         end
+        result << " abcdefgh"
         result
     end
 end

@@ -2,8 +2,6 @@ require_relative 'board.rb'
 require_relative 'pieces.rb'
 
 class ChessRunner
-    CASTLING_ROOK_DEST = {[0,2] => [0,3], [0,6] => [0,5], [7,2] => [7,3], [7,6] => [7,5]}
-    CASTLING_ROOK_ORIGIN = {[0,2] => [0,0], [0,6] => [0,7], [7,2] => [7,0], [7,6] => [7,7]}
     attr_accessor :board
     def initialize
         @board = ChessBoard.new
@@ -52,7 +50,7 @@ class ChessRunner
         until @board.game_over?
             draw_board
             move = get_move(@activeplayer)
-            execute_move(move)
+            @board.execute_move(move)
             promo = promotable_pawn
             if promo
                 @board.place_piece(select_promotion(@activeplayer),pos)
@@ -97,36 +95,6 @@ class ChessRunner
             puts "Invalid unit, try again:"
             unit = gets.chomp            
         end
-    end
-
-    def execute_move(move)
-        start = move[0]
-        dest = move[1]
-        piece = @board.pos_piece(start)
-        @board.place_piece(piece, dest)
-        @board.place_piece(nil, start)
-
-        if piece.class == King && ((start[1] - dest[1]).abs > 1)
-            rook = @board.pos_piece(CASTLING_ROOK_ORIGIN[start])
-            rook_dest = CASTLING_ROOK_DEST[start]
-            @board.place_piece(rook, rook_dest)
-            rook.moved= true
-        end
-
-        # En-passant capture
-        if piece.class == Pawn && (start[0] - dest[0]).abs > 0 && @board.pos_free?(dest)
-            passant_pos = [dest[0], start[1]]
-            @board.place_piece(nil, passant_pos)
-        end
-
-        @board.clear_passants
-
-        if piece.class == Pawn && (start[1] - dest[1]).abs > 1
-            piece.passant_capturable= true
-            piece.passant_pos= [start[0], start[1] + (dest[1] - start[1])/2]
-        end
-
-        piece.moved= true
     end
 
     def swap_activeplayer

@@ -1,6 +1,10 @@
 class ChessBoard
     WIDTH = 8
     HEIGHT = 8
+    CASTLING_ROOK_DEST = {[0,2] => [0,3], [0,6] => [0,5], [7,2] => [7,3], [7,6] => [7,5]}
+    CASTLING_ROOK_ORIGIN = {[0,2] => [0,0], [0,6] => [0,7], [7,2] => [7,0], [7,6] => [7,7]}
+
+    attr_accessor :board
 
     def initialize
         @board = Array.new(8*8)
@@ -35,6 +39,7 @@ class ChessBoard
     end
 
     def checkmate?(color)
+        # REWRITE THIS TOTALLY
         @board.each do |piece|
             if piece && piece.class == King && piece.color == color
                 index = @board.index(piece)
@@ -45,37 +50,70 @@ class ChessBoard
         false
     end
 
+    def execute_move(move)
+        start = move[0]
+        dest = move[1]
+        piece = self.pos_piece(start)
+        self.place_piece(piece, dest)
+        self.place_piece(nil, start)
+
+        if piece.class == King && ((start[1] - dest[1]).abs > 1)
+            rook = self.pos_piece(CASTLING_ROOK_ORIGIN[start])
+            rook_dest = CASTLING_ROOK_DEST[start]
+            self.place_piece(rook, rook_dest)
+            rook.moved= true
+        end
+
+        # En-passant capture
+        if piece.class == Pawn && (start[0] - dest[0]).abs > 0 && self.pos_free?(dest)
+            passant_pos = [dest[0], start[1]]
+            self.place_piece(nil, passant_pos)
+        end
+
+        self.clear_passants
+
+        if piece.class == Pawn && (start[1] - dest[1]).abs > 1
+            piece.passant_capturable= true
+            piece.passant_pos= [start[0], start[1] + (dest[1] - start[1])/2]
+        end
+
+        piece.moved= true
+    end
+
+    def next_board(move)
+        clone_board = @board.map(&:clone)
+        result = ChessBoard.new
+        result.board = clone_board
+        result.execute_move(move)
+        result
+    end
+
     def check?(color)
         @board.each do |piece|
             if piece && piece.class == King && piece.color == color
                 index = @board.index(piece)
                 pos = [index % HEIGHT, index / HEIGHT]
-                return pos_checked?(pos, color)
+                WIDTH.times do |x|
+                    HEIGHT.times do |y|
+                        piece = self.pos_piece([x,y])
+                        if piece && piece.color != color
+                            return true if piece.destinations(self,[x,y]).include?(pos)
+                        end
+                    end
+                end
             end
         end
         false
     end
 
     def game_over?
-        return checkmate?(:white) || checkmate?(:black)
+        return checkmate?(:white) || checkmate?(:black) || stalemate?
     end
 
     def each
         @board.each do |pos|
             yield(pos)
         end
-    end
-
-    def pos_checked?(pos, side)
-        WIDTH.times do |x|
-            HEIGHT.times do |y|
-                piece = self.pos_piece([x,y])
-                if piece && piece.color != side
-                    return true if piece.capture_spaces(self,[x,y]).include?(pos)
-                end
-            end
-        end
-        false
     end
 
     def clear_passants

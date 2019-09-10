@@ -8,9 +8,14 @@ class Piece
         @letter = letter
     end
 
-    def remove_checking_dests(pos, dests, board, color)
+    def destinations_without_check(board, pos)
+        dests = self.destinations(board, pos)
+        remove_checking_dests(pos, dests, board)
+    end
+
+    def remove_checking_dests(pos, dests, board)
         dests.select do |dest|
-            !board.next_board([pos,dest]).check?(color)
+            !board.next_board([pos,dest]).check?(@color)
         end
     end
 end
@@ -41,7 +46,7 @@ class DirectionalPiece < Piece
                 end
             end
         end
-        remove_checking_dests(pos, destinations, board, @color)
+        destinations
     end
 end
 
@@ -91,7 +96,7 @@ class Knight < Piece
                 end
             end
         end
-        remove_checking_dests(pos, destinations, board, @color)
+        destinations
     end
 end
 
@@ -144,34 +149,21 @@ class Pawn < Piece
                 destinations << piece.passant_pos
             end
         end
-        remove_checking_dests(pos, destinations, board, @color)
+        destinations
     end
 end
 
 class King < Piece
-    NORMAL_MOVES = [[0,1],[0,-1],[1,0],[-1, 0]]
+    NORMAL_MOVES = [[0,1],[0,-1],[1,0],[-1, 0],[1,1],[1,-1],[-1,1],[-1,-1]]
     CASTLING_MOVES = [[-2,0],[2,0]]
     def initialize(color)
         super(color, "\u{265A}", "K") if color == :black
         super(color, "\u{2654}", "K") if color == :white
     end
 
-    def destinations(board, pos)
-        destinations = []
-        NORMAL_MOVES.each do |move|
-            target = [pos[0] + move[0], pos[1] + move[1]]
-            if ChessBoard.on_board?(target)
-                if board.pos_free?(target)
-                    destinations << target
-                else
-                    blocker = board.pos_piece(target)
-                    if blocker.color != self.color
-                        destinations << target
-                    end
-                end
-            end
-        end
-        destinations = remove_checking_dests(pos, destinations, board, @color)
+    def destinations_without_check(board, pos)
+        destinations = self.destinations(board, pos)
+        destinations = remove_checking_dests(pos, destinations, board)
         if !@moved && !board.check?(@color)
             # Queenside castle
             rook_pos = [pos[0] - 4, pos[1]]
@@ -199,6 +191,24 @@ class King < Piece
                         if !board.next_board([pos,free_and_safe2]).check?(@color)
                             destinations << free_and_safe2
                         end
+                    end
+                end
+            end
+        end
+        destinations
+    end
+
+    def destinations(board, pos)
+        destinations = []
+        NORMAL_MOVES.each do |move|
+            target = [pos[0] + move[0], pos[1] + move[1]]
+            if ChessBoard.on_board?(target)
+                if board.pos_free?(target)
+                    destinations << target
+                else
+                    blocker = board.pos_piece(target)
+                    if blocker.color != self.color
+                        destinations << target
                     end
                 end
             end

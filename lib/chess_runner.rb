@@ -47,7 +47,7 @@ class ChessRunner
     end
 
     def play
-        until @board.game_over?
+        until @board.game_over?(@activeplayer)
             draw_board
             move = get_move(@activeplayer)
             @board.execute_move(move)
@@ -55,7 +55,9 @@ class ChessRunner
             if promo
                 @board.place_piece(select_promotion(@activeplayer),pos)
             end
-            if @board.checkmate?(@inactiveplayer)
+            if @board.stalemate?(@inactiveplayer) 
+                puts "The #{@inactiveplayer} player is stalemated"
+            elsif @board.checkmate?(@inactiveplayer)
                 puts "Checkmate for #{@activeplayer}"
             elsif @board.check?(@inactiveplayer)
                 puts "Check for #{@activeplayer}"
@@ -110,7 +112,7 @@ class ChessRunner
                 start = ChessBoard.translate_rank_file(move[1..2])
                 dest = ChessBoard.translate_rank_file(move[3..4])
                 piece = @board.pos_piece(start)
-                if piece && piece.letter == letter && piece.color == player && piece.destinations(@board, start).include?(dest)
+                if piece && piece.letter == letter && piece.color == player && piece.destinations_without_check(@board, start).include?(dest)
                     return [start,dest]
                 end
             end

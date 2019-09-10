@@ -38,16 +38,42 @@ class ChessBoard
         @board.index(piece)
     end
 
-    def checkmate?(color)
-        # REWRITE THIS TOTALLY
+    def check?(color)
         @board.each do |piece|
             if piece && piece.class == King && piece.color == color
                 index = @board.index(piece)
                 pos = [index % HEIGHT, index / HEIGHT]
-                return pos_checked?(pos, color) && piece.destinations(self, pos) == []
+                WIDTH.times do |x|
+                    HEIGHT.times do |y|
+                        piece = self.pos_piece([x,y])
+                        if piece && piece.color != color
+                            return true if piece.destinations(self,[x,y]).include?(pos)
+                        end
+                    end
+                end
             end
         end
         false
+    end
+
+    def checkmate?(color)
+        return check?(color) && no_legal_moves?(color)
+    end
+
+    def stalemate?(color)
+        return !check?(color) && no_legal_moves?(color)
+    end
+
+    def no_legal_moves?(color)
+        WIDTH.times do |x|
+            HEIGHT.times do |y|
+                piece = self.pos_piece([x,y])
+                if piece && piece.color == color
+                    return false unless piece.destinations_without_check(self,[x,y]).empty?
+                end
+            end
+        end
+        true
     end
 
     def execute_move(move)
@@ -88,26 +114,8 @@ class ChessBoard
         result
     end
 
-    def check?(color)
-        @board.each do |piece|
-            if piece && piece.class == King && piece.color == color
-                index = @board.index(piece)
-                pos = [index % HEIGHT, index / HEIGHT]
-                WIDTH.times do |x|
-                    HEIGHT.times do |y|
-                        piece = self.pos_piece([x,y])
-                        if piece && piece.color != color
-                            return true if piece.destinations(self,[x,y]).include?(pos)
-                        end
-                    end
-                end
-            end
-        end
-        false
-    end
-
-    def game_over?
-        return checkmate?(:white) || checkmate?(:black) || stalemate?
+    def game_over?(activeplayer)
+        return checkmate?(:white) || checkmate?(:black) || stalemate?(activeplayer)
     end
 
     def each

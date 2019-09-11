@@ -14,24 +14,12 @@ class ChessBoard
         @board[self.class.xy_to_flat(pos[0],pos[1])] = piece
     end
 
-    def is_empty?
-        @board.empty?
-    end
-
-    def xy_free?(x,y)
-        @board[self.class.xy_to_flat(x,y)] == nil
-    end
-
     def pos_free?(pos)
-        xy_free?(pos[0],pos[1])
+        @board[self.class.xy_to_flat(pos[0],pos[1])] == nil
     end
 
     def pos_piece(pos)
         @board[self.class.xy_to_flat(pos[0],pos[1])]
-    end
-
-    def xy_piece(x,y)
-        @board[self.class.xy_to_flat(x,y)]
     end
 
     def index(piece)
@@ -134,7 +122,7 @@ class ChessBoard
     end
     
     def self.xy_to_flat(x,y)
-        y*8 + x
+        y * WIDTH + x
     end
 
     def self.translate_rank_file(rf)

@@ -104,15 +104,16 @@ end
 
 class Pawn < Piece
     attr_accessor :passant_capturable, :passant_pos
-    def initialize(color, symbol)
-        super(color, symbol, "P")
+    def initialize(color)
         @passant_capturable = false
         @passant_pos = nil
         if color == :white
+            super(color, "\u{2659}", "P")
             @normal_destinations = [[0,1]]
             @capturing_destinations = [[-1,1],[1,1]]
             @starting_destinations = [[0,2]]
         elsif color == :black
+            super(color, "\u{265F}", "P")
             @normal_destinations = [[0,-1]]
             @capturing_destinations = [[-1,-1],[1,-1]]
             @starting_destinations = [[0,-2]]

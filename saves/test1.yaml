@@ -1,0 +1,487 @@
+---
+:board: !ruby/object:ChessBoard
+  board:
+  - !ruby/object:Rook
+    color: :white
+    moved: false
+    symbol: "♖"
+    letter: R
+  - !ruby/object:Knight
+    color: :white
+    moved: false
+    symbol: "♘"
+    letter: N
+  - !ruby/object:Bishop
+    color: :white
+    moved: false
+    symbol: "♗"
+    letter: B
+  - !ruby/object:Queen
+    color: :white
+    moved: false
+    symbol: "♕"
+    letter: Q
+  - !ruby/object:King
+    color: :white
+    moved: false
+    symbol: "♔"
+    letter: K
+  - !ruby/object:Bishop
+    color: :white
+    moved: false
+    symbol: "♗"
+    letter: B
+  - !ruby/object:Knight
+    color: :white
+    moved: false
+    symbol: "♘"
+    letter: N
+  - !ruby/object:Rook
+    color: :white
+    moved: false
+    symbol: "♖"
+    letter: R
+  - 
+  - !ruby/object:Pawn
+    color: :white
+    moved: false
+    symbol: "♙"
+    letter: P
+    passant_capturable: false
+    passant_pos: 
+    normal_destinations:
+    - - 0
+      - 1
+    capturing_destinations:
+    - - -1
+      - 1
+    - - 1
+      - 1
+    starting_destinations:
+    - - 0
+      - 2
+    passant_directions:
+    - - 1
+      - 0
+    - - -1
+      - 0
+  - !ruby/object:Pawn
+    color: :white
+    moved: false
+    symbol: "♙"
+    letter: P
+    passant_capturable: false
+    passant_pos: 
+    normal_destinations:
+    - - 0
+      - 1
+    capturing_destinations:
+    - - -1
+      - 1
+    - - 1
+      - 1
+    starting_destinations:
+    - - 0
+      - 2
+    passant_directions:
+    - - 1
+      - 0
+    - - -1
+      - 0
+  - !ruby/object:Pawn
+    color: :white
+    moved: false
+    symbol: "♙"
+    letter: P
+    passant_capturable: false
+    passant_pos: 
+    normal_destinations:
+    - - 0
+      - 1
+    capturing_destinations:
+    - - -1
+      - 1
+    - - 1
+      - 1
+    starting_destinations:
+    - - 0
+      - 2
+    passant_directions:
+    - - 1
+      - 0
+    - - -1
+      - 0
+  - !ruby/object:Pawn
+    color: :white
+    moved: false
+    symbol: "♙"
+    letter: P
+    passant_capturable: false
+    passant_pos: 
+    normal_destinations:
+    - - 0
+      - 1
+    capturing_destinations:
+    - - -1
+      - 1
+    - - 1
+      - 1
+    starting_destinations:
+    - - 0
+      - 2
+    passant_directions:
+    - - 1
+      - 0
+    - - -1
+      - 0
+  - !ruby/object:Pawn
+    color: :white
+    moved: false
+    symbol: "♙"
+    letter: P
+    passant_capturable: false
+    passant_pos: 
+    normal_destinations:
+    - - 0
+      - 1
+    capturing_destinations:
+    - - -1
+      - 1
+    - - 1
+      - 1
+    starting_destinations:
+    - - 0
+      - 2
+    passant_directions:
+    - - 1
+      - 0
+    - - -1
+      - 0
+  - !ruby/object:Pawn
+    color: :white
+    moved: false
+    symbol: "♙"
+    letter: P
+    passant_capturable: false
+    passant_pos: 
+    normal_destinations:
+    - - 0
+      - 1
+    capturing_destinations:
+    - - -1
+      - 1
+    - - 1
+      - 1
+    starting_destinations:
+    - - 0
+      - 2
+    passant_directions:
+    - - 1
+      - 0
+    - - -1
+      - 0
+  - !ruby/object:Pawn
+    color: :white
+    moved: false
+    symbol: "♙"
+    letter: P
+    passant_capturable: false
+    passant_pos: 
+    normal_destinations:
+    - - 0
+      - 1
+    capturing_destinations:
+    - - -1
+      - 1
+    - - 1
+      - 1
+    starting_destinations:
+    - - 0
+      - 2
+    passant_directions:
+    - - 1
+      - 0
+    - - -1
+      - 0
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - !ruby/object:Pawn
+    color: :white
+    moved: true
+    symbol: "♙"
+    letter: P
+    passant_capturable: false
+    passant_pos: 
+    normal_destinations:
+    - - 0
+      - 1
+    capturing_destinations:
+    - - -1
+      - 1
+    - - 1
+      - 1
+    starting_destinations:
+    - - 0
+      - 2
+    passant_directions:
+    - - 1
+      - 0
+    - - -1
+      - 0
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - !ruby/object:Pawn
+    color: :black
+    moved: true
+    symbol: "♟"
+    letter: P
+    passant_capturable: true
+    passant_pos:
+    - 0
+    - 5
+    normal_destinations:
+    - - 0
+      - -1
+    capturing_destinations:
+    - - -1
+      - -1
+    - - 1
+      - -1
+    starting_destinations:
+    - - 0
+      - -2
+    passant_directions:
+    - - 1
+      - 0
+    - - -1
+      - 0
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - !ruby/object:Pawn
+    color: :black
+    moved: false
+    symbol: "♟"
+    letter: P
+    passant_capturable: false
+    passant_pos: 
+    normal_destinations:
+    - - 0
+      - -1
+    capturing_destinations:
+    - - -1
+      - -1
+    - - 1
+      - -1
+    starting_destinations:
+    - - 0
+      - -2
+    passant_directions:
+    - - 1
+      - 0
+    - - -1
+      - 0
+  - !ruby/object:Pawn
+    color: :black
+    moved: false
+    symbol: "♟"
+    letter: P
+    passant_capturable: false
+    passant_pos: 
+    normal_destinations:
+    - - 0
+      - -1
+    capturing_destinations:
+    - - -1
+      - -1
+    - - 1
+      - -1
+    starting_destinations:
+    - - 0
+      - -2
+    passant_directions:
+    - - 1
+      - 0
+    - - -1
+      - 0
+  - !ruby/object:Pawn
+    color: :black
+    moved: false
+    symbol: "♟"
+    letter: P
+    passant_capturable: false
+    passant_pos: 
+    normal_destinations:
+    - - 0
+      - -1
+    capturing_destinations:
+    - - -1
+      - -1
+    - - 1
+      - -1
+    starting_destinations:
+    - - 0
+      - -2
+    passant_directions:
+    - - 1
+      - 0
+    - - -1
+      - 0
+  - !ruby/object:Pawn
+    color: :black
+    moved: false
+    symbol: "♟"
+    letter: P
+    passant_capturable: false
+    passant_pos: 
+    normal_destinations:
+    - - 0
+      - -1
+    capturing_destinations:
+    - - -1
+      - -1
+    - - 1
+      - -1
+    starting_destinations:
+    - - 0
+      - -2
+    passant_directions:
+    - - 1
+      - 0
+    - - -1
+      - 0
+  - !ruby/object:Pawn
+    color: :black
+    moved: false
+    symbol: "♟"
+    letter: P
+    passant_capturable: false
+    passant_pos: 
+    normal_destinations:
+    - - 0
+      - -1
+    capturing_destinations:
+    - - -1
+      - -1
+    - - 1
+      - -1
+    starting_destinations:
+    - - 0
+      - -2
+    passant_directions:
+    - - 1
+      - 0
+    - - -1
+      - 0
+  - !ruby/object:Pawn
+    color: :black
+    moved: false
+    symbol: "♟"
+    letter: P
+    passant_capturable: false
+    passant_pos: 
+    normal_destinations:
+    - - 0
+      - -1
+    capturing_destinations:
+    - - -1
+      - -1
+    - - 1
+      - -1
+    starting_destinations:
+    - - 0
+      - -2
+    passant_directions:
+    - - 1
+      - 0
+    - - -1
+      - 0
+  - !ruby/object:Pawn
+    color: :black
+    moved: false
+    symbol: "♟"
+    letter: P
+    passant_capturable: false
+    passant_pos: 
+    normal_destinations:
+    - - 0
+      - -1
+    capturing_destinations:
+    - - -1
+      - -1
+    - - 1
+      - -1
+    starting_destinations:
+    - - 0
+      - -2
+    passant_directions:
+    - - 1
+      - 0
+    - - -1
+      - 0
+  - !ruby/object:Rook
+    color: :black
+    moved: false
+    symbol: "♜"
+    letter: R
+  - !ruby/object:Knight
+    color: :black
+    moved: false
+    symbol: "♞"
+    letter: N
+  - !ruby/object:Bishop
+    color: :black
+    moved: false
+    symbol: "♝"
+    letter: B
+  - !ruby/object:Queen
+    color: :black
+    moved: false
+    symbol: "♛"
+    letter: Q
+  - !ruby/object:King
+    color: :black
+    moved: false
+    symbol: "♚"
+    letter: K
+  - !ruby/object:Bishop
+    color: :black
+    moved: false
+    symbol: "♝"
+    letter: B
+  - !ruby/object:Knight
+    color: :black
+    moved: false
+    symbol: "♞"
+    letter: N
+  - !ruby/object:Rook
+    color: :black
+    moved: false
+    symbol: "♜"
+    letter: R
+:activeplayer: :white
+:inactiveplayer: :black

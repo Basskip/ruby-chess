@@ -11,9 +11,8 @@ class ChessRunner
     end
 
     def place_pawns(color, row)
-        marker = (color == :black ? "\u{265F}" : "\u{2659}")
         8.times do |x|
-            @board.place_piece(Pawn.new(color,marker),[x,row])
+            @board.place_piece(Pawn.new(color),[x,row])
         end
     end
 
@@ -101,7 +100,7 @@ class ChessRunner
             @board.execute_move(move)
             promo = promotable_pawn
             if promo
-                @board.place_piece(select_promotion(@activeplayer),pos)
+                @board.place_piece(select_promotion(@activeplayer),promo)
             end
             if @board.stalemate?(@inactiveplayer) 
                 puts "The #{@inactiveplayer} player is stalemated"
